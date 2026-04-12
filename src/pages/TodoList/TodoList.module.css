@@ -70,3 +70,12 @@
   background: #fff;
   cursor: pointer;
 }
+
+.searchInput {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  flex: 1;
+  max-width: 300px;
+}

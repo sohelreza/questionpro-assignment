@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useFilters } from "../../hooks/useFilters";
 import { useTodos } from "../../hooks/useTodos";
 import { useUsers } from "../../hooks/useUsers";
 import styles from "./TodoList.module.css";
@@ -10,8 +10,8 @@ function TodoList() {
     error: todosError,
   } = useTodos();
   const { data: users, isLoading: usersLoading } = useUsers();
-  const [selectedUser, setSelectedUser] = useState("");
-  const [statusFilter, setStatusFilter] = useState("");
+  const { filters, updateFilter } = useFilters();
+  const { selectedUser, statusFilter, searchQuery } = filters;
 
   if (todosLoading || usersLoading) return <p>Loading...</p>;
   if (todosError) return <p>Error loading todos</p>;
@@ -25,6 +25,11 @@ function TodoList() {
     if (selectedUser && todo.userId !== Number(selectedUser)) return false;
     if (statusFilter === "completed" && !todo.completed) return false;
     if (statusFilter === "pending" && todo.completed) return false;
+    if (
+      searchQuery &&
+      !todo.title.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+      return false;
     return true;
   });
 
@@ -32,9 +37,16 @@ function TodoList() {
     <div className={styles.container}>
       <h2 className={styles.title}>Todo List</h2>
       <div className={styles.filters}>
+        <input
+          type="text"
+          placeholder="Search todos..."
+          value={searchQuery}
+          onChange={(e) => updateFilter("searchQuery", e.target.value)}
+          className={styles.searchInput}
+        />
         <select
           value={selectedUser}
-          onChange={(e) => setSelectedUser(e.target.value)}
+          onChange={(e) => updateFilter("selectedUser", e.target.value)}
         >
           <option value="">All Users</option>
           {users.map((user) => (
@@ -45,7 +57,7 @@ function TodoList() {
         </select>
         <select
           value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
+          onChange={(e) => updateFilter("statusFilter", e.target.value)}
         >
           <option value="">All Status</option>
           <option value="completed">Completed</option>
