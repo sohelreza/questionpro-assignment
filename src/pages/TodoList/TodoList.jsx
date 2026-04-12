@@ -1,5 +1,6 @@
 import { useTodos } from "../../hooks/useTodos";
 import { useUsers } from "../../hooks/useUsers";
+import styles from "./TodoList.module.css";
 
 function TodoList() {
   const {
@@ -18,28 +19,18 @@ function TodoList() {
   };
 
   return (
-    <div>
-      <h2>Todo List</h2>
-      <ul style={{ listStyle: "none", padding: 0 }}>
+    <div className={styles.container}>
+      <h2 className={styles.title}>Todo List</h2>
+      <ul className={styles.todoList}>
         {todos.map((todo) => (
-          <li
-            key={todo.id}
-            style={{ padding: "8px 0", borderBottom: "1px solid #eee" }}
-          >
-            <strong>{todo.title}</strong>
+          <li key={todo.id} className={styles.todoItem}>
+            <span className={styles.todoTitle}>{todo.title}</span>
             <span
-              style={{
-                marginLeft: "10px",
-                color: todo.completed ? "green" : "orange",
-              }}
+              className={`${styles.badge} ${todo.completed ? styles.completed : styles.pending}`}
             >
               {todo.completed ? "Completed" : "Pending"}
             </span>
-            <span
-              style={{ marginLeft: "10px", color: "#888", fontSize: "0.9em" }}
-            >
-              — {getUserName(todo.userId)}
-            </span>
+            <span className={styles.userName}>{getUserName(todo.userId)}</span>
           </li>
         ))}
       </ul>
