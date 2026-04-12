@@ -1,10 +1,21 @@
 import { useTodos } from "../../hooks/useTodos";
+import { useUsers } from "../../hooks/useUsers";
 
 function TodoList() {
-  const { data: todos, isLoading, error } = useTodos();
+  const {
+    data: todos,
+    isLoading: todosLoading,
+    error: todosError,
+  } = useTodos();
+  const { data: users, isLoading: usersLoading } = useUsers();
 
-  if (isLoading) return <p>Loading todos...</p>;
-  if (error) return <p>Error loading todos</p>;
+  if (todosLoading || usersLoading) return <p>Loading...</p>;
+  if (todosError) return <p>Error loading todos</p>;
+
+  const getUserName = (userId) => {
+    const user = users?.find((u) => u.id === userId);
+    return user ? user.name : "Unknown";
+  };
 
   return (
     <div>
@@ -15,7 +26,7 @@ function TodoList() {
             key={todo.id}
             style={{ padding: "8px 0", borderBottom: "1px solid #eee" }}
           >
-            <span>{todo.title}</span>
+            <strong>{todo.title}</strong>
             <span
               style={{
                 marginLeft: "10px",
@@ -23,6 +34,11 @@ function TodoList() {
               }}
             >
               {todo.completed ? "Completed" : "Pending"}
+            </span>
+            <span
+              style={{ marginLeft: "10px", color: "#888", fontSize: "0.9em" }}
+            >
+              — {getUserName(todo.userId)}
             </span>
           </li>
         ))}
