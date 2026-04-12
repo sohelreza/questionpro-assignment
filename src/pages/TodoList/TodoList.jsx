@@ -11,6 +11,7 @@ function TodoList() {
   } = useTodos();
   const { data: users, isLoading: usersLoading } = useUsers();
   const [selectedUser, setSelectedUser] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
 
   if (todosLoading || usersLoading) return <p>Loading...</p>;
   if (todosError) return <p>Error loading todos</p>;
@@ -21,7 +22,10 @@ function TodoList() {
   };
 
   const filteredTodos = todos.filter((todo) => {
-    return !selectedUser || todo.userId === Number(selectedUser);
+    if (selectedUser && todo.userId !== Number(selectedUser)) return false;
+    if (statusFilter === "completed" && !todo.completed) return false;
+    if (statusFilter === "pending" && todo.completed) return false;
+    return true;
   });
 
   return (
@@ -38,6 +42,14 @@ function TodoList() {
               {user.name}
             </option>
           ))}
+        </select>
+        <select
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value)}
+        >
+          <option value="">All Status</option>
+          <option value="completed">Completed</option>
+          <option value="pending">Pending</option>
         </select>
       </div>
       <ul className={styles.todoList}>
