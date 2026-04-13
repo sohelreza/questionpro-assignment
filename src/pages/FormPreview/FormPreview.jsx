@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import styles from "./FormPreview.module.css";
 
 function FormPreview() {
@@ -114,7 +115,10 @@ function FormPreview() {
     return (
       <div className={styles.container}>
         <h2 className={styles.title}>Form Preview</h2>
-        <p className={styles.emptyMsg}>No form configured yet.</p>
+        <p className={styles.emptyMsg}>
+          No form configured yet.{" "}
+          <Link to="/form-builder">Create one here</Link>
+        </p>
       </div>
     );
   }
