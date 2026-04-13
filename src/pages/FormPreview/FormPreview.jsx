@@ -1,4 +1,5 @@
 import { useState } from "react";
+import styles from "./FormPreview.module.css";
 
 function FormPreview() {
   const [fields] = useState(() => {
@@ -21,7 +22,6 @@ function FormPreview() {
   };
 
   const handleSubmit = () => {
-    // map field ids to labels for readable output
     const output = {};
     fields.forEach((field) => {
       const label = field.label || "Untitled Field";
@@ -50,13 +50,7 @@ function FormPreview() {
             type={field.type}
             value={formData[field.id] || ""}
             onChange={(e) => handleChange(field.id, e.target.value)}
-            style={{
-              width: "100%",
-              padding: "8px 12px",
-              border: "1px solid #ddd",
-              borderRadius: "6px",
-              fontSize: "0.9rem",
-            }}
+            className={styles.input}
           />
         );
       case "textarea":
@@ -65,14 +59,7 @@ function FormPreview() {
             value={formData[field.id] || ""}
             onChange={(e) => handleChange(field.id, e.target.value)}
             rows={3}
-            style={{
-              width: "100%",
-              padding: "8px 12px",
-              border: "1px solid #ddd",
-              borderRadius: "6px",
-              fontSize: "0.9rem",
-              resize: "vertical",
-            }}
+            className={styles.textarea}
           />
         );
       case "select":
@@ -80,13 +67,7 @@ function FormPreview() {
           <select
             value={formData[field.id] || ""}
             onChange={(e) => handleChange(field.id, e.target.value)}
-            style={{
-              width: "100%",
-              padding: "8px 12px",
-              border: "1px solid #ddd",
-              borderRadius: "6px",
-              fontSize: "0.9rem",
-            }}
+            className={styles.select}
           >
             <option value="">Select an option</option>
             {options.map((opt) => (
@@ -98,7 +79,7 @@ function FormPreview() {
         );
       case "checkbox":
         return (
-          <label style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <label className={styles.checkboxLabel}>
             <input
               type="checkbox"
               checked={formData[field.id] || false}
@@ -109,12 +90,9 @@ function FormPreview() {
         );
       case "radio":
         return (
-          <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+          <div className={styles.radioGroup}>
             {options.map((opt) => (
-              <label
-                key={opt}
-                style={{ display: "flex", alignItems: "center", gap: "8px" }}
-              >
+              <label key={opt} className={styles.radioLabel}>
                 <input
                   type="radio"
                   name={`field-${field.id}`}
@@ -134,53 +112,32 @@ function FormPreview() {
 
   if (fields.length === 0) {
     return (
-      <div style={{ maxWidth: "600px", margin: "0 auto", padding: "1.5rem" }}>
-        <h2>Form Preview</h2>
-        <p>No form configured yet.</p>
+      <div className={styles.container}>
+        <h2 className={styles.title}>Form Preview</h2>
+        <p className={styles.emptyMsg}>No form configured yet.</p>
       </div>
     );
   }
 
   return (
-    <div style={{ maxWidth: "600px", margin: "0 auto", padding: "1.5rem" }}>
-      <h2>Form Preview</h2>
+    <div className={styles.container}>
+      <h2 className={styles.title}>Form Preview</h2>
       <div>
         {fields.map((field) => (
-          <div key={field.id} style={{ marginBottom: "16px" }}>
+          <div key={field.id} className={styles.fieldGroup}>
             {field.type !== "checkbox" && (
-              <label
-                style={{
-                  display: "block",
-                  marginBottom: "6px",
-                  fontWeight: 500,
-                  fontSize: "0.9rem",
-                }}
-              >
+              <label className={styles.label}>
                 {field.label || "Untitled Field"}
               </label>
             )}
             {renderField(field)}
           </div>
         ))}
-        <button
-          onClick={handleSubmit}
-          style={{
-            padding: "10px 24px",
-            border: "none",
-            borderRadius: "6px",
-            background: "#2563eb",
-            color: "#fff",
-            cursor: "pointer",
-            fontSize: "0.95rem",
-            marginTop: "8px",
-          }}
-        >
+        <button onClick={handleSubmit} className={styles.submitBtn}>
           Submit
         </button>
         {submitted && (
-          <p
-            style={{ color: "#15713d", marginTop: "10px", fontSize: "0.9rem" }}
-          >
+          <p className={styles.successMsg}>
             Form submitted! Check console for data.
           </p>
         )}

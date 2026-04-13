@@ -1,4 +1,5 @@
 import { useState } from "react";
+import styles from "./FormBuilder.module.css";
 
 const INPUT_TYPES = [
   { value: "text", label: "Text Input" },
@@ -53,50 +54,25 @@ function FormBuilder() {
   };
 
   return (
-    <div style={{ maxWidth: "700px", margin: "0 auto", padding: "1.5rem" }}>
-      <h2>Form Builder</h2>
-      <p style={{ color: "#666", marginBottom: "1.5rem" }}>
-        Define your form fields below
-      </p>
+    <div className={styles.container}>
+      <h2 className={styles.title}>Form Builder</h2>
+      <p className={styles.subtitle}>Define your form fields below</p>
 
       {fields.map((field, index) => (
-        <div
-          key={field.id}
-          style={{
-            marginBottom: "12px",
-            padding: "12px",
-            border: "1px solid #e8e8e8",
-            borderRadius: "6px",
-          }}
-        >
-          <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-            <span
-              style={{ color: "#999", fontSize: "0.85rem", minWidth: "20px" }}
-            >
-              {index + 1}.
-            </span>
+        <div key={field.id} className={styles.fieldRow}>
+          <div className={styles.fieldMain}>
+            <span className={styles.fieldIndex}>{index + 1}.</span>
             <input
               type="text"
               placeholder="Field label"
               value={field.label}
               onChange={(e) => updateField(field.id, "label", e.target.value)}
-              style={{
-                flex: 1,
-                padding: "8px 12px",
-                border: "1px solid #ddd",
-                borderRadius: "6px",
-                fontSize: "0.9rem",
-              }}
+              className={styles.fieldLabel}
             />
             <select
               value={field.type}
               onChange={(e) => updateField(field.id, "type", e.target.value)}
-              style={{
-                padding: "8px 12px",
-                border: "1px solid #ddd",
-                borderRadius: "6px",
-                fontSize: "0.9rem",
-              }}
+              className={styles.fieldType}
             >
               {INPUT_TYPES.map((type) => (
                 <option key={type.value} value={type.value}>
@@ -106,20 +82,13 @@ function FormBuilder() {
             </select>
             <button
               onClick={() => removeField(field.id)}
-              style={{
-                padding: "6px 12px",
-                border: "1px solid #e8e8e8",
-                borderRadius: "6px",
-                background: "#fff",
-                cursor: "pointer",
-                color: "#cc0000",
-              }}
+              className={styles.removeBtn}
             >
               Remove
             </button>
           </div>
           {needsOptions(field.type) && (
-            <div style={{ marginTop: "8px", marginLeft: "30px" }}>
+            <div className={styles.optionsRow}>
               <input
                 type="text"
                 placeholder="Options (comma separated, e.g. Active, Inactive, Pending)"
@@ -127,58 +96,26 @@ function FormBuilder() {
                 onChange={(e) =>
                   updateField(field.id, "options", e.target.value)
                 }
-                style={{
-                  width: "100%",
-                  padding: "8px 12px",
-                  border: "1px solid #ddd",
-                  borderRadius: "6px",
-                  fontSize: "0.85rem",
-                }}
+                className={styles.optionsInput}
               />
             </div>
           )}
         </div>
       ))}
 
-      <div
-        style={{
-          display: "flex",
-          gap: "12px",
-          alignItems: "center",
-          marginTop: "16px",
-        }}
-      >
-        <button
-          onClick={addField}
-          style={{
-            padding: "8px 20px",
-            border: "1px solid #ddd",
-            borderRadius: "6px",
-            background: "#fff",
-            cursor: "pointer",
-          }}
-        >
+      <div className={styles.actions}>
+        <button onClick={addField} className={styles.addBtn}>
           + Add Field
         </button>
         <button
           onClick={saveForm}
           disabled={fields.length === 0}
-          style={{
-            padding: "8px 20px",
-            border: "none",
-            borderRadius: "6px",
-            background: "#2563eb",
-            color: "#fff",
-            cursor: "pointer",
-            opacity: fields.length === 0 ? 0.4 : 1,
-          }}
+          className={styles.saveBtn}
         >
           Save Form
         </button>
         {saveMessage && (
-          <span style={{ color: "#15713d", fontSize: "0.9rem" }}>
-            {saveMessage}
-          </span>
+          <span className={styles.saveMessage}>{saveMessage}</span>
         )}
       </div>
     </div>
