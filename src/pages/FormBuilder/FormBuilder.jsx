@@ -14,7 +14,18 @@ const INPUT_TYPES = [
 const needsOptions = (type) => type === "select" || type === "radio";
 
 function FormBuilder() {
-  const [fields, setFields] = useState([]);
+  const [fields, setFields] = useState(() => {
+    const saved = localStorage.getItem("formConfig");
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        console.log("Failed to parse saved form config");
+      }
+    }
+    return [];
+  });
+  const [saveMessage, setSaveMessage] = useState("");
 
   const addField = () => {
     setFields([
@@ -33,6 +44,12 @@ function FormBuilder() {
 
   const removeField = (id) => {
     setFields(fields.filter((field) => field.id !== id));
+  };
+
+  const saveForm = () => {
+    localStorage.setItem("formConfig", JSON.stringify(fields));
+    setSaveMessage("Form saved successfully!");
+    setTimeout(() => setSaveMessage(""), 2000);
   };
 
   return (
@@ -123,19 +140,47 @@ function FormBuilder() {
         </div>
       ))}
 
-      <button
-        onClick={addField}
+      <div
         style={{
-          padding: "8px 20px",
-          border: "1px solid #ddd",
-          borderRadius: "6px",
-          background: "#fff",
-          cursor: "pointer",
-          marginTop: "8px",
+          display: "flex",
+          gap: "12px",
+          alignItems: "center",
+          marginTop: "16px",
         }}
       >
-        + Add Field
-      </button>
+        <button
+          onClick={addField}
+          style={{
+            padding: "8px 20px",
+            border: "1px solid #ddd",
+            borderRadius: "6px",
+            background: "#fff",
+            cursor: "pointer",
+          }}
+        >
+          + Add Field
+        </button>
+        <button
+          onClick={saveForm}
+          disabled={fields.length === 0}
+          style={{
+            padding: "8px 20px",
+            border: "none",
+            borderRadius: "6px",
+            background: "#2563eb",
+            color: "#fff",
+            cursor: "pointer",
+            opacity: fields.length === 0 ? 0.4 : 1,
+          }}
+        >
+          Save Form
+        </button>
+        {saveMessage && (
+          <span style={{ color: "#15713d", fontSize: "0.9rem" }}>
+            {saveMessage}
+          </span>
+        )}
+      </div>
     </div>
   );
 }
