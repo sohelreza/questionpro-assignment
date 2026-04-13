@@ -73,36 +73,46 @@ function TodoList() {
           <option value="pending">Pending</option>
         </select>
       </div>
-      <ul className={styles.todoList}>
-        {paginatedTodos.map((todo) => (
-          <li key={todo.id} className={styles.todoItem}>
-            <span className={styles.todoTitle}>{todo.title}</span>
-            <span
-              className={`${styles.badge} ${todo.completed ? styles.completed : styles.pending}`}
+      {paginatedTodos.length > 0 ? (
+        <>
+          <ul className={styles.todoList}>
+            {paginatedTodos.map((todo) => (
+              <li key={todo.id} className={styles.todoItem}>
+                <span className={styles.todoTitle}>{todo.title}</span>
+                <span
+                  className={`${styles.badge} ${todo.completed ? styles.completed : styles.pending}`}
+                >
+                  {todo.completed ? "Completed" : "Pending"}
+                </span>
+                <span className={styles.userName}>
+                  {getUserName(todo.userId)}
+                </span>
+              </li>
+            ))}
+          </ul>
+          <div className={styles.pagination}>
+            <button
+              onClick={() => updateFilter("currentPage", currentPage - 1)}
+              disabled={currentPage === 1}
             >
-              {todo.completed ? "Completed" : "Pending"}
+              Prev
+            </button>
+            <span>
+              Page {currentPage} of {totalPages}
             </span>
-            <span className={styles.userName}>{getUserName(todo.userId)}</span>
-          </li>
-        ))}
-      </ul>
-      <div className={styles.pagination}>
-        <button
-          onClick={() => updateFilter("currentPage", currentPage - 1)}
-          disabled={currentPage === 1}
-        >
-          Prev
-        </button>
-        <span>
-          Page {currentPage} of {totalPages}
-        </span>
-        <button
-          onClick={() => updateFilter("currentPage", currentPage + 1)}
-          disabled={currentPage === totalPages}
-        >
-          Next
-        </button>
-      </div>
+            <button
+              onClick={() => updateFilter("currentPage", currentPage + 1)}
+              disabled={currentPage === totalPages}
+            >
+              Next
+            </button>
+          </div>
+        </>
+      ) : (
+        <div className={styles.emptyState}>
+          <p>No todos found matching your filters.</p>
+        </div>
+      )}
     </div>
   );
 }
