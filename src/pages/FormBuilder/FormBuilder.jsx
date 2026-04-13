@@ -11,11 +11,16 @@ const INPUT_TYPES = [
   { value: "date", label: "Date" },
 ];
 
+const needsOptions = (type) => type === "select" || type === "radio";
+
 function FormBuilder() {
   const [fields, setFields] = useState([]);
 
   const addField = () => {
-    setFields([...fields, { id: Date.now(), label: "", type: "text" }]);
+    setFields([
+      ...fields,
+      { id: Date.now(), label: "", type: "text", options: "" },
+    ]);
   };
 
   const updateField = (id, key, value) => {
@@ -41,62 +46,80 @@ function FormBuilder() {
         <div
           key={field.id}
           style={{
-            display: "flex",
-            gap: "10px",
-            alignItems: "center",
             marginBottom: "12px",
             padding: "12px",
             border: "1px solid #e8e8e8",
             borderRadius: "6px",
           }}
         >
-          <span
-            style={{ color: "#999", fontSize: "0.85rem", minWidth: "20px" }}
-          >
-            {index + 1}.
-          </span>
-          <input
-            type="text"
-            placeholder="Field label"
-            value={field.label}
-            onChange={(e) => updateField(field.id, "label", e.target.value)}
-            style={{
-              flex: 1,
-              padding: "8px 12px",
-              border: "1px solid #ddd",
-              borderRadius: "6px",
-              fontSize: "0.9rem",
-            }}
-          />
-          <select
-            value={field.type}
-            onChange={(e) => updateField(field.id, "type", e.target.value)}
-            style={{
-              padding: "8px 12px",
-              border: "1px solid #ddd",
-              borderRadius: "6px",
-              fontSize: "0.9rem",
-            }}
-          >
-            {INPUT_TYPES.map((type) => (
-              <option key={type.value} value={type.value}>
-                {type.label}
-              </option>
-            ))}
-          </select>
-          <button
-            onClick={() => removeField(field.id)}
-            style={{
-              padding: "6px 12px",
-              border: "1px solid #e8e8e8",
-              borderRadius: "6px",
-              background: "#fff",
-              cursor: "pointer",
-              color: "#cc0000",
-            }}
-          >
-            Remove
-          </button>
+          <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+            <span
+              style={{ color: "#999", fontSize: "0.85rem", minWidth: "20px" }}
+            >
+              {index + 1}.
+            </span>
+            <input
+              type="text"
+              placeholder="Field label"
+              value={field.label}
+              onChange={(e) => updateField(field.id, "label", e.target.value)}
+              style={{
+                flex: 1,
+                padding: "8px 12px",
+                border: "1px solid #ddd",
+                borderRadius: "6px",
+                fontSize: "0.9rem",
+              }}
+            />
+            <select
+              value={field.type}
+              onChange={(e) => updateField(field.id, "type", e.target.value)}
+              style={{
+                padding: "8px 12px",
+                border: "1px solid #ddd",
+                borderRadius: "6px",
+                fontSize: "0.9rem",
+              }}
+            >
+              {INPUT_TYPES.map((type) => (
+                <option key={type.value} value={type.value}>
+                  {type.label}
+                </option>
+              ))}
+            </select>
+            <button
+              onClick={() => removeField(field.id)}
+              style={{
+                padding: "6px 12px",
+                border: "1px solid #e8e8e8",
+                borderRadius: "6px",
+                background: "#fff",
+                cursor: "pointer",
+                color: "#cc0000",
+              }}
+            >
+              Remove
+            </button>
+          </div>
+          {needsOptions(field.type) && (
+            <div style={{ marginTop: "8px", marginLeft: "30px" }}>
+              <input
+                type="text"
+                placeholder="Options (comma separated, e.g. Active, Inactive, Pending)"
+                value={field.options}
+                onChange={(e) =>
+                  updateField(field.id, "options", e.target.value)
+                }
+                style={{
+                  width: "100%",
+                  padding: "8px 12px",
+                  border: "1px solid #ddd",
+                  borderRadius: "6px",
+                  fontSize: "0.85rem",
+                }}
+              />
+            </div>
+          )}
         </div>
       ))}
 
