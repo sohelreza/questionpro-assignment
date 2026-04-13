@@ -5,8 +5,34 @@
 }
 
 .title {
-  margin-bottom: 1rem;
+  margin-bottom: 1.2rem;
   font-size: 1.5rem;
+}
+
+.filters {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 1.2rem;
+  flex-wrap: wrap;
+}
+
+.filters select,
+.searchInput {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  background: #fff;
+}
+
+.filters select {
+  cursor: pointer;
+  min-width: 160px;
+}
+
+.searchInput {
+  flex: 1;
+  max-width: 300px;
 }
 
 .todoList {
@@ -23,6 +49,11 @@
   border-radius: 6px;
   margin-bottom: 8px;
   background: #fff;
+  transition: box-shadow 0.15s ease;
+}
+
+.todoItem:hover {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
 }
 
 .todoTitle {
@@ -36,6 +67,7 @@
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .completed {
@@ -49,35 +81,11 @@
 }
 
 .userName {
-  color: #888;
+  color: #666;
   font-size: 0.85rem;
   margin-left: 12px;
   min-width: 140px;
   text-align: right;
-}
-
-.filters {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 1rem;
-}
-
-.filters select {
-  padding: 8px 12px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  font-size: 0.9rem;
-  background: #fff;
-  cursor: pointer;
-}
-
-.searchInput {
-  padding: 8px 12px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  font-size: 0.9rem;
-  flex: 1;
-  max-width: 300px;
 }
 
 .pagination {
@@ -96,6 +104,11 @@
   background: #fff;
   cursor: pointer;
   font-size: 0.9rem;
+  transition: background 0.15s ease;
+}
+
+.pagination button:hover:not(:disabled) {
+  background: #f5f5f5;
 }
 
 .pagination button:disabled {
