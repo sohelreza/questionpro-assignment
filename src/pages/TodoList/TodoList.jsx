@@ -3,6 +3,8 @@ import { useTodos } from "../../hooks/useTodos";
 import { useUsers } from "../../hooks/useUsers";
 import styles from "./TodoList.module.css";
 
+const ITEMS_PER_PAGE = 10;
+
 function TodoList() {
   const {
     data: todos,
@@ -11,7 +13,7 @@ function TodoList() {
   } = useTodos();
   const { data: users, isLoading: usersLoading } = useUsers();
   const { filters, updateFilter } = useFilters();
-  const { selectedUser, statusFilter, searchQuery } = filters;
+  const { selectedUser, statusFilter, searchQuery, currentPage } = filters;
 
   if (todosLoading || usersLoading) return <p>Loading...</p>;
   if (todosError) return <p>Error loading todos</p>;
@@ -32,6 +34,13 @@ function TodoList() {
       return false;
     return true;
   });
+
+  const totalPages = Math.ceil(filteredTodos.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const paginatedTodos = filteredTodos.slice(
+    startIndex,
+    startIndex + ITEMS_PER_PAGE,
+  );
 
   return (
     <div className={styles.container}>
@@ -65,7 +74,7 @@ function TodoList() {
         </select>
       </div>
       <ul className={styles.todoList}>
-        {filteredTodos.map((todo) => (
+        {paginatedTodos.map((todo) => (
           <li key={todo.id} className={styles.todoItem}>
             <span className={styles.todoTitle}>{todo.title}</span>
             <span
@@ -77,6 +86,23 @@ function TodoList() {
           </li>
         ))}
       </ul>
+      <div className={styles.pagination}>
+        <button
+          onClick={() => updateFilter("currentPage", currentPage - 1)}
+          disabled={currentPage === 1}
+        >
+          Prev
+        </button>
+        <span>
+          Page {currentPage} of {totalPages}
+        </span>
+        <button
+          onClick={() => updateFilter("currentPage", currentPage + 1)}
+          disabled={currentPage === totalPages}
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 }

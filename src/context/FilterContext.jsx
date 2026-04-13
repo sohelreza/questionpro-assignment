@@ -8,10 +8,15 @@ export function FilterProvider({ children }) {
     selectedUser: "",
     statusFilter: "",
     searchQuery: "",
+    currentPage: 1,
   });
 
   const updateFilter = (key, value) => {
-    setFilters((prev) => ({ ...prev, [key]: value }));
+    setFilters((prev) => ({
+      ...prev,
+      [key]: value,
+      ...(key !== "currentPage" ? { currentPage: 1 } : {}),
+    }));
   };
 
   const value = useMemo(() => ({ filters, updateFilter }), [filters]);
