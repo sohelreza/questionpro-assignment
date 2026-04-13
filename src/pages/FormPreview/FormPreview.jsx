@@ -14,9 +14,22 @@ function FormPreview() {
   });
 
   const [formData, setFormData] = useState({});
+  const [submitted, setSubmitted] = useState(false);
 
   const handleChange = (fieldId, value) => {
     setFormData((prev) => ({ ...prev, [fieldId]: value }));
+  };
+
+  const handleSubmit = () => {
+    // map field ids to labels for readable output
+    const output = {};
+    fields.forEach((field) => {
+      const label = field.label || "Untitled Field";
+      output[label] = formData[field.id] || "";
+    });
+    console.log("Form submitted:", output);
+    setSubmitted(true);
+    setTimeout(() => setSubmitted(false), 3000);
   };
 
   const renderField = (field) => {
@@ -149,6 +162,28 @@ function FormPreview() {
             {renderField(field)}
           </div>
         ))}
+        <button
+          onClick={handleSubmit}
+          style={{
+            padding: "10px 24px",
+            border: "none",
+            borderRadius: "6px",
+            background: "#2563eb",
+            color: "#fff",
+            cursor: "pointer",
+            fontSize: "0.95rem",
+            marginTop: "8px",
+          }}
+        >
+          Submit
+        </button>
+        {submitted && (
+          <p
+            style={{ color: "#15713d", marginTop: "10px", fontSize: "0.9rem" }}
+          >
+            Form submitted! Check console for data.
+          </p>
+        )}
       </div>
     </div>
   );
