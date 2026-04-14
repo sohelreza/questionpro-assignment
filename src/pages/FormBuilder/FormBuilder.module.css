@@ -117,3 +117,17 @@
   color: #15713d;
   font-size: 0.9rem;
 }
+
+@media (max-width: 600px) {
+  .fieldMain {
+    flex-wrap: wrap;
+  }
+
+  .fieldLabel {
+    width: 100%;
+  }
+
+  .fieldType {
+    flex: 1;
+  }
+}

@@ -127,3 +127,32 @@
   color: #888;
   font-size: 0.95rem;
 }
+
+@media (max-width: 600px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .filters {
+    flex-direction: column;
+  }
+
+  .searchInput {
+    max-width: 100%;
+  }
+
+  .filters select {
+    min-width: 100%;
+  }
+
+  .todoItem {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .userName {
+    min-width: auto;
+    text-align: left;
+    margin-left: 0;
+  }
+}

@@ -10,7 +10,7 @@ function App() {
     <FilterProvider>
       <div>
         <Navbar />
-        <main style={{ padding: "1rem" }}>
+        <main>
           <Routes>
             <Route path="/todos" element={<TodoList />} />
             <Route path="/form-builder" element={<FormBuilder />} />
