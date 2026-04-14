@@ -1,9 +1,10 @@
+import { useState } from "react";
 import { useFilters } from "../../hooks/useFilters";
 import { useTodos } from "../../hooks/useTodos";
 import { useUsers } from "../../hooks/useUsers";
 import styles from "./TodoList.module.css";
 
-const ITEMS_PER_PAGE = 10;
+const PAGE_SIZE_OPTIONS = [5, 10, 20, 50];
 
 function TodoList() {
   const {
@@ -13,7 +14,9 @@ function TodoList() {
   } = useTodos();
   const { data: users, isLoading: usersLoading } = useUsers();
   const { filters, updateFilter } = useFilters();
-  const { selectedUser, statusFilter, searchQuery, currentPage } = filters;
+  const { selectedUser, statusFilter, searchQuery, currentPage, itemsPerPage } =
+    filters;
+  const [pageInput, setPageInput] = useState("");
 
   if (todosLoading || usersLoading) return <p>Loading...</p>;
   if (todosError) return <p>Error loading todos</p>;
@@ -35,12 +38,24 @@ function TodoList() {
     return true;
   });
 
-  const totalPages = Math.ceil(filteredTodos.length / ITEMS_PER_PAGE);
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const totalPages = Math.ceil(filteredTodos.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
   const paginatedTodos = filteredTodos.slice(
     startIndex,
-    startIndex + ITEMS_PER_PAGE,
+    startIndex + itemsPerPage,
   );
+
+  const handlePageInputGo = () => {
+    const page = parseInt(pageInput, 10);
+    if (page >= 1 && page <= totalPages) {
+      updateFilter("currentPage", page);
+    }
+    setPageInput("");
+  };
+
+  const handlePageInputKeyDown = (e) => {
+    if (e.key === "Enter") handlePageInputGo();
+  };
 
   return (
     <div className={styles.container}>
@@ -73,6 +88,7 @@ function TodoList() {
           <option value="pending">Pending</option>
         </select>
       </div>
+
       {paginatedTodos.length > 0 ? (
         <>
           <ul className={styles.todoList}>
@@ -106,6 +122,35 @@ function TodoList() {
             >
               Next
             </button>
+            <div className={styles.pageJump}>
+              <input
+                type="number"
+                min="1"
+                max={totalPages}
+                placeholder="Go to"
+                value={pageInput}
+                onChange={(e) => setPageInput(e.target.value)}
+                onKeyDown={handlePageInputKeyDown}
+                className={styles.pageInput}
+              />
+              <button onClick={handlePageInputGo} className={styles.goBtn}>
+                Go
+              </button>
+            </div>
+            <div className={styles.perPage}>
+              <select
+                value={itemsPerPage}
+                onChange={(e) =>
+                  updateFilter("itemsPerPage", Number(e.target.value))
+                }
+              >
+                {PAGE_SIZE_OPTIONS.map((size) => (
+                  <option key={size} value={size}>
+                    {size} / page
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         </>
       ) : (

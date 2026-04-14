@@ -9,13 +9,17 @@ export function FilterProvider({ children }) {
     statusFilter: "",
     searchQuery: "",
     currentPage: 1,
+    itemsPerPage: 10,
   });
 
   const updateFilter = (key, value) => {
     setFilters((prev) => ({
       ...prev,
       [key]: value,
-      ...(key !== "currentPage" ? { currentPage: 1 } : {}),
+      ...(key !== "currentPage" && key !== "itemsPerPage"
+        ? { currentPage: 1 }
+        : {}),
+      ...(key === "itemsPerPage" ? { currentPage: 1 } : {}),
     }));
   };
 
