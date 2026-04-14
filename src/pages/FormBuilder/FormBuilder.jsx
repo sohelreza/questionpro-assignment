@@ -21,7 +21,7 @@ function FormBuilder() {
       try {
         return JSON.parse(saved);
       } catch (e) {
-        console.log("Failed to parse saved form config");
+        return [];
       }
     }
     return [];
